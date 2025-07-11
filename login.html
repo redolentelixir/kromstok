@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="UTF-8"><title>Giriş Yap</title></head>
+<body>
+  <h2>Stok Girişi İçin Giriş Yap</h2>
+  <input type="password" id="password" placeholder="Şifre">
+  <button onclick="checkPassword()">Giriş Yap</button>
+  <p id="message"></p>
+
+  <script>
+    function checkPassword() {
+      const pass = document.getElementById("password").value;
+      if (pass === "krom123") {
+        window.location.href = "form.html";
+      } else {
+        document.getElementById("message").innerText = "Hatalı şifre!";
+      }
+    }
+  </script>
+</body>
+</html>
