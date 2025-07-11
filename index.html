@@ -67,10 +67,7 @@
 
         <div class="tab-content" id="stokTabContent">
             <div class="tab-pane fade show active" id="genel" role="tabpanel">
-                <div class="row g-4 mb-4" id="kutular">
-                    <!-- Kutular JavaScript ile doldurulacak -->
-                </div>
-
+                <div class="row g-4 mb-4" id="kutular"></div>
                 <div class="card bg-light text-dark p-4 mb-4">
                     <h4 class="mb-3">📊 Grafiksel Stok Dağılımı</h4>
                     <canvas id="stokChart" height="250"></canvas>
@@ -81,7 +78,7 @@
 
     <script>
         const apiKey = "AIzaSyBQALP8yhI7V5N7M6Ivr2mJ8RzjGtFCPcE";
-        const spreadsheetId = "1Fv64X1Xl8t8KZCReZcQdgc5dc2v2NQdkICZKVbRDaYg";
+        const spreadsheetId = "1G2BYbdrngqJyrlOywIbUX0cRtIz_hTWdbr1Og2FI4V8";
         const range = "GENEL STOK!A2:F2";
 
         const headers = [
@@ -94,9 +91,6 @@
         ];
 
         const colors = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948'];
-
-        const ctx = document.createElement('canvas');
-        ctx.id = "stokChart";
 
         const kutularContainer = document.getElementById("kutular");
 
