@@ -12,17 +12,29 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             min-height: 100vh;
             color: #fff;
+            font-family: 'Segoe UI', sans-serif;
         }
         .card {
             border-radius: 15px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
-        .btn-custom {
-            background: #2c3e50;
-            border: none;
+        .info-box {
+            background: #ffffff;
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .btn-custom:hover {
-            background: #1a252f;
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .info-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
         }
         .nav-tabs .nav-link.active {
             background-color: #fff;
@@ -30,8 +42,9 @@
         }
         iframe {
             width: 100%;
-            height: 600px;
+            height: 400px;
             border: none;
+            margin-top: 20px;
         }
         canvas {
             background-color: #fff;
@@ -44,7 +57,7 @@
     <div class="container py-5">
         <div class="text-center mb-4">
             <h1 class="display-5 fw-bold">🏭 KROM STOK TAKİP</h1>
-            <p class="lead">Canlı Genel Stok ve Günlük Giriş Paneli</p>
+            <p class="lead">Canlı Genel Stok Görüntüleme</p>
             <a href="login.html" class="btn btn-lg btn-warning mt-3">🔐 Yetkili Giriş</a>
         </div>
 
@@ -59,16 +72,53 @@
         </ul>
 
         <div class="tab-content" id="stokTabContent">
-            <!-- Genel Stok (Google Sheet) -->
+            <!-- Genel Stok -->
             <div class="tab-pane fade show active" id="genel" role="tabpanel">
-                <div class="card bg-light text-dark p-4 mb-4">
-                    <h4 class="mb-3">🌐 Google Sheet Üzerinden Genel Stok (Canlı)</h4>
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR6ZKn3bR3E4n8fsfpPAsfdTbtbdcIR7I2bJt7lgwQQKeQCg1da3t_1FJ-VMMoLufkKL9MKINwX0qBN/pubhtml?gid=1888761825&single=true&widget=true&headers=false"></iframe>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-title">TÜVENAN STOK</div>
+                            <div class="info-value">2020</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-title">SEÇME STOK</div>
+                            <div class="info-value">130</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-title">MASA KONSANTRE (STOK)</div>
+                            <div class="info-value">340</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-title">ROŞ (STOK)</div>
+                            <div class="info-value">105</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-title">ATIK (KUM)</div>
+                            <div class="info-value">2</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-box">
+                            <div class="info-title">KUM (STOK)</div>
+                            <div class="info-value">1180</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card bg-light text-dark p-4">
-                    <h4 class="mb-3">📈 Grafiksel Stok Özeti</h4>
+
+                <div class="card bg-light text-dark p-4 mb-4">
+                    <h4 class="mb-3">📈 Grafiksel Stok Dağılımı</h4>
                     <canvas id="stokChart" height="100"></canvas>
                 </div>
+
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR6ZKn3bR3E4n8fsfpPAsfdTbtbdcIR7I2bJt7lgwQQKeQCg1da3t_1FJ-VMMoLufkKL9MKINwX0qBN/pubhtml?gid=1888761825&single=true&widget=true&headers=false"></iframe>
             </div>
 
             <!-- Bugünkü Stok -->
@@ -130,30 +180,33 @@
     <script>
         const ctx = document.getElementById('stokChart').getContext('2d');
         const stokChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
-                labels: ['Tüvenan Stok', 'Seçme Stok', 'Konsantre Stok', 'Roş Stok'],
+                labels: [
+                    'TÜVENAN STOK',
+                    'SEÇME STOK',
+                    'MASA KONSANTRE',
+                    'ROŞ STOK',
+                    'ATIK (KUM)',
+                    'KUM STOK'
+                ],
                 datasets: [{
                     label: '2025-07-12',
-                    data: [2020, 130, 340, 105],
-                    backgroundColor: ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2']
+                    data: [2020, 130, 340, 105, 2, 1180],
+                    backgroundColor: [
+                        '#4e79a7',
+                        '#f28e2b',
+                        '#e15759',
+                        '#76b7b2',
+                        '#59a14f',
+                        '#edc948'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: '#000'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: '#000'
-                        }
-                    }
-                },
                 plugins: {
                     legend: {
                         labels: {
