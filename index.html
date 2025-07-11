@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krom Stok Takip Sistemi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        .formula-box {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: auto;
+        }
+        .formula-box::before {
+            content: "Excel Formülü";
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .excel-table th, .excel-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        .excel-table th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        .excel-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .excel-table tr:hover {
+            background: #e8f4f8;
+        }
+        .input-col {
+            background: #e8f5e8 !important;
+        }
+        .stock-col {
+            background: #fff3cd !important;
+        }
+        .explanation {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        .step h3 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 KROM STOK TAKİP SİSTEMİ</h1>
+            <p>Otomatik Formül Hesaplama Sistemi</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>📊 Excel Tablosu Yapısı</h2>
+                <div class="table-container">
+                    <table class="excel-table">
+                        <thead>
+                            <tr>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                                <th>E</th>
+                                <th>F</th>
+                                <th>G</th>
+                                <th>H</th>
+                                <th>I</th>
+                                <th>J</th>
+                                <th>K</th>
+                                <th>L</th>
+                                <th>M</th>
+                                <th>N</th>
+                                <th>O</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tarih</td>
+                                <td class="input-col">TÜVENAN (GELEN)</td>
+                                <td class="input-col">TÜVENAN (İŞLENEN)</td>
+                                <td class="input-col">MASA KONSANTRE(ÇIKAN)</td>
+                                <td class="input-col">SEÇME TESİS TÜVENAN (GELEN)</td>
+                                <td class="input-col">SEÇME TESİS TÜVENAN (İŞLENEN)</td>
+                                <td class="input-col">MASA KONSANTRE (SEVK)</td>
+                                <td class="input-col">ROŞ (SEVK)</td>
+                                <td></td>
+                                <td></td>
+                                <td class="stock-col">TÜVENAN STOK</td>
+                                <td class="stock-col">SEÇME STOK</td>
+                                <td class="stock-col">MASA KONSANTRE (STOK)</td>
+                                <td class="stock-col">ROŞ (STOK)</td>
+                                <td class="stock-col">ATIK</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-09</td>
+                                <td class="input-col">150</td>
+                                <td class="input-col">145</td>
+                                <td class="input-col">142</td>
+                                <td class="input-col">68</td>
+                                <td class="input-col">60</td>
+                                <td class="input-col">250</td>
+                                <td class="input-col">45</td>
+                                <td></td>
+                                <td></td>
+                                <td class="stock-col">Formül</td>
+                                <td class="stock-col">Formül</td>
+                                <td class="stock-col">Formül</td>
+                                <td class="stock-col">Formül</td>
+                                <td class="stock-col">Formül</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔧 Formüller ve Kurulum</h2>
+                
+                <div class="step">
+                    <h3>1. TÜVENAN STOK (K Kolonu)</h3>
+                    <p>K2 hücresine başlangıç stok değerini girin. K3 hücresinden itibaren aşağıdaki formülü uygulayın:</p>
+                    <div class="formula-box">
+=K2+EĞER(B3="","",B3)-EĞER(C3="","",C3)
+                    </div>
+                    <div class="explanation">
+                        <strong>Açıklama:</strong> Önceki stok + Gelen Tüvenan - İşlenen Tüvenan
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>2. SEÇME STOK (L Kolonu)</h3>
+                    <p>L2 hücresine başlangıç stok değerini girin. L3 hücresinden itibaren aşağıdaki formülü uygulayın:</p>
+                    <div class="formula-box">
+=L2+EĞER(E3="","",E3)-EĞER(F3="","",F3)
+                    </div>
+                    <div class="explanation">
+                        <strong>Açıklama:</strong> Önceki stok + Gelen Seçme Tesis Tüvenan - İşlenen Seçme Tesis Tüvenan
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>3. MASA KONSANTRE STOK (M Kolonu)</h3>
+                    <p>M2 hücresine başlangıç stok değerini girin. M3 hücresinden itibaren aşağıdaki formülü uygulayın:</p>
+                    <div class="formula-box">
+=M2+EĞER(D3="","",D3)-EĞER(G3="","",G3)
+                    </div>
+                    <div class="explanation">
+                        <strong>Açıklama:</strong> Önceki stok + Çıkan Masa Konsantre - Sevk Edilen Masa Konsantre
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>4. ROŞ STOK (N Kolonu)</h3>
+                    <p>N2 hücresine başlangıç stok değerini girin. N3 hücresinden itibaren aşağıdaki formülü uygulayın:</p>
+                    <div class="formula-box">
+=N2+EĞER(F3="","",F3)-EĞER(H3="","",H3)
+                    </div>
+                    <div class="explanation">
+                        <strong>Açıklama:</strong> Önceki stok + İşlenen Seçme Tesis Tüvenan - Sevk Edilen Roş
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>5. ATIK (O Kolonu)</h3>
+                    <p>O3 hücresinden itibaren aşağıdaki formülü uygulayın:</p>
+                    <div class="formula-box">
+=EĞER(VE(C3<>"",D3<>""),C3-D3,"")
+                    </div>
+                    <div class="explanation">
+                        <strong>Açıklama:</strong> İşlenen Tüvenan - Çıkan Masa Konsantre = Atık
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚙️ Kurulum Adımları</h2>
+                
+                <div class="step">
+                    <h3>Adım 1: Başlangıç Stok Değerlerini Girin</h3>
+                    <p>İlk satırda (2. satır) K, L, M, N sütunlarına mevcut stok değerlerini girin:</p>
+                    <ul>
+                        <li><span class="highlight">K2:</span> Mevcut Tüvenan Stok</li>
+                        <li><span class="highlight">L2:</span> Mevcut Seçme Stok</li>
+                        <li><span class="highlight">M2:</span> Mevcut Masa Konsantre Stok</li>
+                        <li><span class="highlight">N2:</span> Mevcut Roş Stok</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h3>Adım 2: Formülleri Uygulayın</h3>
+                    <p>3. satırdan itibaren yukarıdaki formülleri ilgili sütunlara girin.</p>
+                </div>
+
+                <div class="step">
+                    <h3>Adım 3: Formülleri Kopyalayın</h3>
+                    <p>3. satırdaki formülleri seçip aşağıya doğru kopyalayın (istediğiniz kadar satır).</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Kullanım Talimatları</h2>
+                
+                <div class="warning">
+                    <strong>DİKKAT:</strong> Formüller boş hücreleri kontrol eder. Veri girilmediğinde hesaplamaya dahil etmez.
+                </div>
+
+                <div class="step">
+                    <h3>Günlük Veri Girişi</h3>
+                    <p>Her gün yeni bir satırda şu verileri girin:</p>
+                    <ul>
+                        <li><strong>A Kolonu:</strong> Tarih</li>
+                        <li><strong>B Kolonu:</strong> Tüvenan (Gelen)</li>
+                        <li><strong>C Kolonu:</strong> Tüvenan (İşlenen)</li>
+                        <li><strong>D Kolonu:</strong> Masa Konsantre (Çıkan)</li>
+                        <li><strong>E Kolonu:</strong> Seçme Tesis Tüvenan (Gelen)</li>
+                        <li><strong>F Kolonu:</strong> Seçme Tesis Tüvenan (İşlenen)</li>
+                        <li><strong>G Kolonu:</strong> Masa Konsantre (Sevk)</li>
+                        <li><strong>H Kolonu:</strong> Roş (Sevk)</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h3>Otomatik Hesaplama</h3>
+                    <p>Veri girişi yapıldığında stok değerleri otomatik olarak güncellenir:</p>
+                    <ul>
+                        <li><strong>K Kolonu:</strong> Tüvenan Stok</li>
+                        <li><strong>L Kolonu:</strong> Seçme Stok</li>
+                        <li><strong>M Kolonu:</strong> Masa Konsantre Stok</li>
+                        <li><strong>N Kolonu:</strong> Roş Stok</li>
+                        <li><strong>O Kolonu:</strong> Atık</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 Formül Açıklamaları</h2>
+                
+                <div class="explanation">
+                    <strong>EĞER Fonksiyonu:</strong> Hücre boş mu kontrolü yapar. Boşsa hesaplamaya dahil etmez.
+                </div>
+                
+                <div class="explanation">
+                    <strong>VE Fonksiyonu:</strong> Atık hesaplamasında hem işlenen hem de çıkan değerin girildiğini kontrol eder.
+                </div>
+                
+                <div class="explanation">
+                    <strong>Stok Hesaplaması:</strong> Önceki stok + Gelen - Çıkan/İşlenen mantığı ile çalışır.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
