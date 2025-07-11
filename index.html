@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Krom Stok Takip Sistemi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -32,29 +33,46 @@
             height: 600px;
             border: none;
         }
+        canvas {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container py-5">
         <div class="text-center mb-4">
             <h1 class="display-5 fw-bold">🏭 KROM STOK TAKİP</h1>
-            <p class="lead">Günlük Stok Görüntüleme ve Giriş Paneli</p>
+            <p class="lead">Canlı Genel Stok ve Günlük Giriş Paneli</p>
             <a href="login.html" class="btn btn-lg btn-warning mt-3">🔐 Yetkili Giriş</a>
         </div>
 
         <!-- Sekmeler -->
         <ul class="nav nav-tabs mb-4" id="stokTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="bugun-tab" data-bs-toggle="tab" data-bs-target="#bugun" type="button" role="tab">📅 Bugünkü Stok</button>
+                <button class="nav-link active" id="genel-tab" data-bs-toggle="tab" data-bs-target="#genel" type="button" role="tab">📂 Genel Stok (Canlı)</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="genel-tab" data-bs-toggle="tab" data-bs-target="#genel" type="button" role="tab">📂 Genel Stok (Canlı)</button>
+                <button class="nav-link" id="bugun-tab" data-bs-toggle="tab" data-bs-target="#bugun" type="button" role="tab">📅 Bugünkü Stok</button>
             </li>
         </ul>
 
         <div class="tab-content" id="stokTabContent">
+            <!-- Genel Stok (Google Sheet) -->
+            <div class="tab-pane fade show active" id="genel" role="tabpanel">
+                <div class="card bg-light text-dark p-4 mb-4">
+                    <h4 class="mb-3">🌐 Google Sheet Üzerinden Genel Stok (Canlı)</h4>
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR6ZKn3bR3E4n8fsfpPAsfdTbtbdcIR7I2bJt7lgwQQKeQCg1da3t_1FJ-VMMoLufkKL9MKINwX0qBN/pubhtml?gid=1888761825&single=true&widget=true&headers=false"></iframe>
+                </div>
+                <div class="card bg-light text-dark p-4">
+                    <h4 class="mb-3">📈 Grafiksel Stok Özeti</h4>
+                    <canvas id="stokChart" height="100"></canvas>
+                </div>
+            </div>
+
             <!-- Bugünkü Stok -->
-            <div class="tab-pane fade show active" id="bugun" role="tabpanel">
+            <div class="tab-pane fade" id="bugun" role="tabpanel">
                 <div class="card bg-light text-dark p-4">
                     <h4 class="mb-3">📊 Bugünkü Stok Bilgileri</h4>
                     <div class="table-responsive">
@@ -106,17 +124,46 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Genel Stok (Google Sheet) -->
-            <div class="tab-pane fade" id="genel" role="tabpanel">
-                <div class="card bg-light text-dark p-4">
-                    <h4 class="mb-3">🌐 Google Sheet Üzerinden Genel Stok (Canlı)</h4>
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR6ZKn3bR3E4n8fsfpPAsfdTbtbdcIR7I2bJt7lgwQQKeQCg1da3t_1FJ-VMMoLufkKL9MKINwX0qBN/pubhtml?gid=1888761825&single=true&widget=true&headers=false"></iframe>
-                </div>
-            </div>
         </div>
     </div>
 
+    <script>
+        const ctx = document.getElementById('stokChart').getContext('2d');
+        const stokChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tüvenan Stok', 'Seçme Stok', 'Konsantre Stok', 'Roş Stok'],
+                datasets: [{
+                    label: '2025-07-12',
+                    data: [2020, 130, 340, 105],
+                    backgroundColor: ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#000'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#000'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#000'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
