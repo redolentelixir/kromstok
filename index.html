@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -168,7 +167,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    const sonveriRange = "Form1!A2:H";
+    const sonveriRange = "Form1!A2:I";
     const sonveriHeaders = [
         "Tarih",
         "TÜVENAN (GELEN)",
@@ -177,7 +176,8 @@
         "SEÇME TESİS (İŞLENEN)",
         "MASA KONSANTRE (ÇIKAN)",
         "MASA KONSANTRE (SEVK)",
-        "ROŞ (SEVK)"
+        "ROŞ (SEVK)",
+        "KUM (SEVK)"
     ];
 
     const sonveriContainer = document.querySelector("#sonveri .row.g-4");
@@ -189,7 +189,7 @@
         let boxHtml = "";
         for (let i = 1; i < sonveriHeaders.length; i++) {
             boxHtml += `
-                <div class="col-md-4">
+                <div class="col-md-3 col-sm-6">
                     <div class="info-box">
                         <div class="info-title">${sonveriHeaders[i]}</div>
                         <div class="info-value">${row[i] || "-"}</div>
