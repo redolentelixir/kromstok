@@ -83,16 +83,8 @@
 
             <!-- SON GİRİLEN VERİLER -->
             <div class="tab-pane fade" id="sonveri" role="tabpanel">
-                <div class="row g-4 mb-4">
-                    <div class="col-md-12 text-center text-white mb-3">
-                        <h4>📅 Son Veri Tarihi: 11/07/2025</h4>
-                    </div>
-                    <div class="col-md-4"><div class="info-box"><div class="info-title">TÜVENAN (GELEN)</div><div class="info-value">150</div></div></div>
-                    <div class="col-md-4"><div class="info-box"><div class="info-title">TÜVENAN (İŞLENEN)</div><div class="info-value">145</div></div></div>
-                    <div class="col-md-4"><div class="info-box"><div class="info-title">SEÇME (GELEN)</div><div class="info-value">68</div></div></div>
-                    <div class="col-md-4"><div class="info-box"><div class="info-title">SEÇME (İŞLENEN)</div><div class="info-value">60</div></div></div>
-                    <div class="col-md-4"><div class="info-box"><div class="info-title">KONSANTRE (ÇIKAN)</div><div class="info-value">142</div></div></div>
-                    <div class="col-md-4"><div class="info-box"><div class="info-title">ATIK</div><div class="info-value">3</div></div></div>
+                <div class="row g-4 mb-4" id="sonveriKutular">
+                    <!-- Veriler JavaScript ile yüklenecek -->
                 </div>
             </div>
         </div>
@@ -180,7 +172,7 @@
         "KUM (SEVK)"
     ];
 
-    const sonveriContainer = document.querySelector("#sonveri .row.g-4");
+    const sonveriContainer = document.querySelector("#sonveriKutular");
 
     const renderSonVeriler = (row) => {
         const tarihHtml = `<div class="col-md-12 text-center text-white mb-3">
