@@ -109,10 +109,10 @@
             "SEÇME STOK",
             "MASA KONSANTRE (STOK)",
             "ROŞ (STOK)",
-            "ATIK (KUM)",
+            
             "KUM (STOK)"
         ];
-        const colors = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948'];
+        const colors = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#edc948'];
 
         const kutularContainer = document.getElementById("kutular");
 
@@ -134,17 +134,17 @@
 
             let html = "";
             values.forEach((val, idx) => {
-                html += createInfoBox(headers[idx], val);
+                if (headers[idx] !== "ATIK (KUM)") html += createInfoBox(headers[idx], val);
             });
             kutularContainer.innerHTML = html;
 
             const chart = new Chart(document.getElementById("stokChart").getContext("2d"), {
                 type: "doughnut",
                 data: {
-                    labels: headers,
+                    labels: headers.filter(h => h !== "ATIK (KUM)"),
                     datasets: [{
                         label: "Stok Verileri",
-                        data: values.map(v => parseFloat(v) || 0),
+                        data: values.filter((v, i) => headers[i] !== "ATIK (KUM)").map(v => parseFloat(v) || 0),
                         backgroundColor: colors,
                         borderColor: "#fff",
                         borderWidth: 2
