@@ -163,7 +163,7 @@
             });
             const stokValues = stokHeaders.map(h => {
                 const idx = headersFromSheet.findIndex(sheetH => sheetH.trim() === h.trim());
-                return idx !== -1 ? lastRow[idx] : 0;
+                return idx !== -1 && lastRow[idx] !== undefined && lastRow[idx] !== "" ? lastRow[idx] : 0;
             });
 
             // Grafik konteynerini temizle ve iki canvas ekle
