@@ -101,7 +101,7 @@
     <script>
         const apiKey = "AIzaSyBQALP8yhI7V5N7M6Ivr2mJ8RzjGtFCPcE";
         const spreadsheetId = "1G2BYbdrngqJyrlOywIbUX0cRtIz_hTWdbr1Og2FI4V8";
-        const range = "GENEL STOK!A2:F2";
+        const range = "GENEL STOK!A1:F"; // Başlıklar ve tüm veriler
 
         const headers = [
             "FABRİKA TÜVENAN STOK",
@@ -144,28 +144,22 @@
         const fetchAndRenderData = async () => {
             const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`);
             const data = await res.json();
-            const values = data.values && data.values[0] ? data.values[0] : [];
-            // Konsola Sheet'ten gelen veriyi yazdır
-            console.log('Sheet values:', values);
+            const allRows = data.values || [];
+            const headersFromSheet = allRows[0] || [];
+            const lastRow = allRows[allRows.length - 1] || [];
 
-            // Kutucuklar (hepsi)
+            // Kutucuklar için
             let html = "";
-            values.forEach((val, idx) => {
-                html += createInfoBox(headers[idx], val);
+            headersFromSheet.forEach((title, idx) => {
+                html += createInfoBox(title, lastRow[idx] || "-");
             });
             kutularContainer.innerHTML = html;
 
-            // Sheet'ten gelen values dizisini başlıkla eşleştir
-            const stokMap = {
-                "FABRİKA TÜVENAN STOK": values[0],
-                "SEÇME TÜVENAN STOK": values[1],
-                "MASA KONSANTRE (STOK)": values[2],
-                "ROŞ (STOK)": values[3],
-                "TESİS TOPLAM İŞLENEN": values[4],
-                "KUM (STOK)": values[5]
-            };
-            // stokHeaders sırasına göre değerleri çek
-            const stokValues = stokHeaders.map(h => stokMap[h]);
+            // Grafik için başlık ve değer eşleştirme
+            const stokValues = stokHeaders.map(h => {
+                const idx = headersFromSheet.indexOf(h);
+                return idx !== -1 ? lastRow[idx] : 0;
+            });
 
             // Grafik konteynerini temizle ve iki canvas ekle
             const chartCard = document.querySelector('.card.bg-light');
