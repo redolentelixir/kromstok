@@ -238,21 +238,26 @@
                     indexAxis: 'y',
                     plugins: {
                         legend: { display: false },
-                        title: { display: false },
+                        title: {
+                            display: false
+                        },
                         datalabels: {
                             anchor: 'end',
-                            align: 'right',
+                            align: 'top',
                             color: '#222',
-                            font: { size: 16, weight: 'bold' },
-                            formatter: (value) => value,
+                            font: { size: 14, weight: 'bold' },
+                            formatter: (value) => {
+                                if (value >= 1000000) return (value/1000000).toFixed(1) + 'M';
+                                if (value >= 1000) return (value/1000).toFixed(1) + 'K';
+                                return value;
+                            },
                             clamp: true,
-                            align: 'right',
-                            offset: 8
+                            offset: 0
                         }
                     },
                     scales: {
                         x: {
-                            type: 'logarithmic',
+                            type: 'linear',
                             beginAtZero: true,
                             grid: { display: false },
                             title: {
@@ -263,7 +268,9 @@
                             },
                             ticks: {
                                 color: '#222',
-                                font: { size: 14 },
+                                font: { size: 12 },
+                                autoSkip: true,
+                                maxTicksLimit: 8,
                                 callback: function(value) {
                                     if (value === 0) return '0';
                                     if (value >= 1000000) return (value/1000000) + 'M';
@@ -311,7 +318,12 @@
                             position: 'right',
                             labels: { color: '#222', font: { size: 16 } }
                         },
-                        title: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Stok Oranları',
+                            color: '#222',
+                            font: { size: 18, weight: 'bold' }
+                        },
                         datalabels: {
                             color: '#222',
                             font: { size: 18, weight: 'bold' },
