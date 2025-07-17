@@ -218,9 +218,9 @@
             new Chart(ctxBar, {
                 type: "bar",
                 data: {
-                    labels: stokHeaders.map(h => h + ' (ton)'),
+                    labels: stokHeaders,
                     datasets: [{
-                        label: "Stok Miktarı (ton)",
+                        label: "Stok Miktarı",
                         data: stokValues.map(v => parseFloat(v) || 0),
                         backgroundColor: [
                             gradientBar,
@@ -243,8 +243,11 @@
                             anchor: 'end',
                             align: 'right',
                             color: '#222',
-                            font: { size: 18, weight: 'bold' },
-                            formatter: (value) => value + ' ton'
+                            font: { size: 16, weight: 'bold' },
+                            formatter: (value) => value,
+                            clamp: true,
+                            align: 'right',
+                            offset: 8
                         }
                     },
                     scales: {
@@ -252,6 +255,12 @@
                             type: 'logarithmic',
                             beginAtZero: true,
                             grid: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Stok Miktarı (ton)',
+                                color: '#222',
+                                font: { size: 16, weight: 'bold' }
+                            },
                             ticks: {
                                 color: '#222',
                                 font: { size: 14 },
@@ -272,16 +281,16 @@
                 plugins: [ChartDataLabels]
             });
 
-            // Polar Area Chart (Yüzde olarak)
+            // Pie Chart (Yüzde olarak)
             const total = stokValues.reduce((acc, v) => acc + (parseFloat(v) || 0), 0);
             const stokPercentages = stokValues.map(v => {
                 const val = parseFloat(v) || 0;
                 return total > 0 ? (val / total * 100) : 0;
             });
             new Chart(document.getElementById("stokChartPolar").getContext("2d"), {
-                type: "polarArea",
+                type: "pie",
                 data: {
-                    labels: stokHeaders.map(h => h + ' (ton)'),
+                    labels: stokHeaders,
                     datasets: [{
                         label: "Stok Oranı (%)",
                         data: stokPercentages,
@@ -306,7 +315,7 @@
                         datalabels: {
                             color: '#222',
                             font: { size: 18, weight: 'bold' },
-                            formatter: (value) => value.toFixed(1) + '%'
+                            formatter: (value, ctx) => value.toFixed(1) + '%'
                         }
                     }
                 },
