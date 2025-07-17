@@ -84,7 +84,14 @@
                 <div class="row g-4 mb-4" id="kutular"></div>
                 <div class="card bg-light text-dark p-4 mb-4">
                     <h4 class="mb-3">📊 Grafiksel Stok Dağılımı</h4>
-                    <div id="apexChart"></div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div id="apexDonutChart"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div id="apexBarChart"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -107,13 +114,14 @@
             "SEÇME TÜVENAN STOK",
             "MASA KONSANTRE (STOK)",
             "ROŞ (STOK)",
-            "TESİS TOPLAM İŞLENEN",
+            // "TESİS TOPLAM İŞLENEN", // Çıkarıldı
             "KUM (STOK)"
         ];
-        const colors = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948'];
+        const colors = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#edc948'];
 
         const kutularContainer = document.getElementById("kutular");
-        const apexChartContainer = document.getElementById("apexChart");
+        const apexDonutChartContainer = document.getElementById("apexDonutChart");
+        const apexBarChartContainer = document.getElementById("apexBarChart");
 
         const createInfoBox = (title, value) => {
             return `
@@ -129,7 +137,11 @@
         const fetchAndRenderData = async () => {
             const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`);
             const data = await res.json();
-            const values = data.values && data.values[0] ? data.values[0] : [];
+            const allValues = data.values && data.values[0] ? data.values[0] : [];
+
+            // Sadece stok olanlar (ilk 3, 4 ve 6. kolonlar)
+            const stokIndexes = [0, 1, 2, 3, 5];
+            const values = stokIndexes.map(i => allValues[i]);
 
             let html = "";
             values.forEach((val, idx) => {
@@ -137,16 +149,15 @@
             });
             kutularContainer.innerHTML = html;
 
-            // ApexCharts ile modern doughnut chart
-            if (window.stokApexChart) {
-                window.stokApexChart.destroy();
-            }
-            window.stokApexChart = new ApexCharts(apexChartContainer, {
+            // Donut Chart
+            if (window.stokApexDonutChart) window.stokApexDonutChart.destroy();
+            window.stokApexDonutChart = new ApexCharts(apexDonutChartContainer, {
                 chart: {
                     type: 'donut',
                     height: 320,
                     fontFamily: 'Segoe UI, sans-serif',
                     toolbar: { show: false },
+                    animations: { enabled: true, easing: 'easeinout', speed: 900 }
                 },
                 series: values.map(v => parseFloat(v) || 0),
                 labels: headers,
@@ -177,6 +188,16 @@
                 },
                 fill: {
                     type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: 'vertical',
+                        shadeIntensity: 0.5,
+                        gradientToColors: undefined,
+                        inverseColors: true,
+                        opacityFrom: 0.85,
+                        opacityTo: 0.95,
+                        stops: [0, 100]
+                    }
                 },
                 tooltip: {
                     y: {
@@ -220,7 +241,69 @@
                     }
                 }
             });
-            window.stokApexChart.render();
+            window.stokApexDonutChart.render();
+
+            // Bar Chart
+            if (window.stokApexBarChart) window.stokApexBarChart.destroy();
+            window.stokApexBarChart = new ApexCharts(apexBarChartContainer, {
+                chart: {
+                    type: 'bar',
+                    height: 320,
+                    fontFamily: 'Segoe UI, sans-serif',
+                    toolbar: { show: false },
+                    animations: { enabled: true, easing: 'easeinout', speed: 900 }
+                },
+                series: [{
+                    name: 'Stok',
+                    data: values.map(v => parseFloat(v) || 0)
+                }],
+                xaxis: {
+                    categories: headers,
+                    labels: {
+                        style: { colors: '#333', fontSize: '15px' }
+                    }
+                },
+                colors: colors,
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        colors: ['#333']
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 8,
+                        columnWidth: '50%',
+                        distributed: true
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.6,
+                        gradientToColors: undefined,
+                        inverseColors: true,
+                        opacityFrom: 0.85,
+                        opacityTo: 0.95,
+                        stops: [0, 100]
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + '';
+                        }
+                    }
+                }
+            });
+            window.stokApexBarChart.render();
         };
 
         fetchAndRenderData();
