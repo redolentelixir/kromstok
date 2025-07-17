@@ -156,8 +156,13 @@
             kutularContainer.innerHTML = html;
 
             // Grafik için başlık ve değer eşleştirme
+            // headersFromSheet ve lastRow'u Sheet'ten çektiğini varsayıyorum
+            console.log('headersFromSheet:', headersFromSheet);
+            stokHeaders.forEach(h => {
+                console.log('Aranan başlık:', h, 'Bulunan index:', headersFromSheet.indexOf(h));
+            });
             const stokValues = stokHeaders.map(h => {
-                const idx = headersFromSheet.indexOf(h);
+                const idx = headersFromSheet.findIndex(sheetH => sheetH.trim() === h.trim());
                 return idx !== -1 ? lastRow[idx] : 0;
             });
 
