@@ -155,7 +155,7 @@
             });
             kutularContainer.innerHTML = html;
 
-            // Başlık-değer eşlemesi ile stokValues oluştur
+            // Sheet'ten gelen values dizisini başlıkla eşleştir
             const stokMap = {
                 "FABRİKA TÜVENAN STOK": values[0],
                 "SEÇME TÜVENAN STOK": values[1],
@@ -164,6 +164,7 @@
                 "TESİS TOPLAM İŞLENEN": values[4],
                 "KUM (STOK)": values[5]
             };
+            // stokHeaders sırasına göre değerleri çek
             const stokValues = stokHeaders.map(h => stokMap[h]);
 
             // Grafik konteynerini temizle ve iki canvas ekle
