@@ -89,7 +89,7 @@
             <div class="tab-pane fade show active" id="genel" role="tabpanel">
                 <div class="row g-4 mb-4" id="kutular"></div>
                 <div class="card bg-light text-dark p-4 mb-4">
-                    <h4 class="mb-4 text-center">Stok Karşılaştırma</h4>
+                    <h4 class="mb-4 text-center">Grafik Gösterimi</h4>
                     <div class="row justify-content-center align-items-stretch gy-4">
                         <div class="col-12 col-md-6 d-flex">
                             <div class="w-100 p-3 bg-white rounded-4 shadow-sm d-flex flex-column align-items-center" style="min-height:350px;">
@@ -188,7 +188,7 @@
             // Grafik konteynerini temizle ve iki canvas ekle
             const chartCard = document.querySelector('.card.bg-light');
             chartCard.innerHTML = `
-                <h4 class="mb-4 text-center">Stok Karşılaştırma</h4>
+                <h4 class="mb-4 text-center">Grafik Gösterimi</h4>
                 <div class="row justify-content-center align-items-stretch gy-4">
                     <div class="col-12 col-md-6 d-flex">
                         <div class="w-100 p-3 bg-white rounded-4 shadow-sm d-flex flex-column align-items-center" style="min-height:350px;">
@@ -301,13 +301,7 @@
                     datasets: [{
                         label: "Stok Oranı (%)",
                         data: stokPercentages,
-                        backgroundColor: [
-                            'rgba(78,121,167,0.8)',
-                            'rgba(242,142,43,0.8)',
-                            'rgba(225,87,89,0.8)',
-                            'rgba(118,183,178,0.8)',
-                            'rgba(237,201,72,0.8)'
-                        ],
+                        backgroundColor: stokColors,
                         borderWidth: 2,
                         borderColor: '#fff'
                     }]
@@ -316,17 +310,20 @@
                     plugins: {
                         legend: {
                             position: 'right',
-                            labels: { color: '#222', font: { size: 16 } }
+                            labels: {
+                                color: '#222',
+                                font: { size: 16, family: 'Segoe UI, sans-serif' }
+                            }
                         },
                         title: {
                             display: true,
                             text: 'Stok Oranları',
                             color: '#222',
-                            font: { size: 18, weight: 'bold' }
+                            font: { size: 18, weight: 'bold', family: 'Segoe UI, sans-serif' }
                         },
                         datalabels: {
                             color: '#222',
-                            font: { size: 18, weight: 'bold' },
+                            font: { size: 12, weight: 'bold', family: 'Segoe UI, sans-serif' },
                             formatter: (value, ctx) => value.toFixed(1) + '%'
                         }
                     }
