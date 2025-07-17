@@ -145,6 +145,8 @@
             const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`);
             const data = await res.json();
             const values = data.values && data.values[0] ? data.values[0] : [];
+            // Konsola Sheet'ten gelen veriyi yazdır
+            console.log('Sheet values:', values);
 
             // Kutucuklar (hepsi)
             let html = "";
@@ -153,8 +155,16 @@
             });
             kutularContainer.innerHTML = html;
 
-            // Grafik için sadece stok olanlar (A, B, C, D, F)
-            const stokValues = [values[0], values[1], values[2], values[3], values[5]];
+            // Başlık-değer eşlemesi ile stokValues oluştur
+            const stokMap = {
+                "FABRİKA TÜVENAN STOK": values[0],
+                "SEÇME TÜVENAN STOK": values[1],
+                "MASA KONSANTRE (STOK)": values[2],
+                "ROŞ (STOK)": values[3],
+                "TESİS TOPLAM İŞLENEN": values[4],
+                "KUM (STOK)": values[5]
+            };
+            const stokValues = stokHeaders.map(h => stokMap[h]);
 
             // Grafik konteynerini temizle ve iki canvas ekle
             const chartCard = document.querySelector('.card.bg-light');
