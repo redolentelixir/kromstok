@@ -218,9 +218,9 @@
             new Chart(ctxBar, {
                 type: "bar",
                 data: {
-                    labels: stokHeaders,
+                    labels: stokHeaders.map(h => h + ' (ton)'),
                     datasets: [{
-                        label: "Stok Miktarı",
+                        label: "Stok Miktarı (ton)",
                         data: stokValues.map(v => parseFloat(v) || 0),
                         backgroundColor: [
                             gradientBar,
@@ -238,25 +238,30 @@
                     indexAxis: 'y',
                     plugins: {
                         legend: { display: false },
-                        title: {
-                            display: true,
-                            text: 'Yatay Stok Grafiği',
-                            color: '#222',
-                            font: { size: 18, weight: 'bold' }
-                        },
+                        title: { display: false },
                         datalabels: {
                             anchor: 'end',
                             align: 'right',
                             color: '#222',
                             font: { size: 18, weight: 'bold' },
-                            formatter: Math.round
+                            formatter: (value) => value + ' ton'
                         }
                     },
                     scales: {
                         x: {
+                            type: 'logarithmic',
                             beginAtZero: true,
                             grid: { display: false },
-                            ticks: { color: '#222', font: { size: 14 } }
+                            ticks: {
+                                color: '#222',
+                                font: { size: 14 },
+                                callback: function(value) {
+                                    if (value === 0) return '0';
+                                    if (value >= 1000000) return (value/1000000) + 'M';
+                                    if (value >= 1000) return (value/1000) + 'K';
+                                    return value;
+                                }
+                            }
                         },
                         y: {
                             grid: { display: false },
@@ -267,14 +272,19 @@
                 plugins: [ChartDataLabels]
             });
 
-            // Polar Area Chart
+            // Polar Area Chart (Yüzde olarak)
+            const total = stokValues.reduce((acc, v) => acc + (parseFloat(v) || 0), 0);
+            const stokPercentages = stokValues.map(v => {
+                const val = parseFloat(v) || 0;
+                return total > 0 ? (val / total * 100) : 0;
+            });
             new Chart(document.getElementById("stokChartPolar").getContext("2d"), {
                 type: "polarArea",
                 data: {
-                    labels: stokHeaders,
+                    labels: stokHeaders.map(h => h + ' (ton)'),
                     datasets: [{
-                        label: "Stok Miktarı",
-                        data: stokValues.map(v => parseFloat(v) || 0),
+                        label: "Stok Oranı (%)",
+                        data: stokPercentages,
                         backgroundColor: [
                             'rgba(78,121,167,0.8)',
                             'rgba(242,142,43,0.8)',
@@ -292,16 +302,11 @@
                             position: 'right',
                             labels: { color: '#222', font: { size: 16 } }
                         },
-                        title: {
-                            display: true,
-                            text: 'Stok Oranları (Polar Area)',
-                            color: '#222',
-                            font: { size: 18, weight: 'bold' }
-                        },
+                        title: { display: false },
                         datalabels: {
                             color: '#222',
                             font: { size: 18, weight: 'bold' },
-                            formatter: Math.round
+                            formatter: (value) => value.toFixed(1) + '%'
                         }
                     }
                 },
